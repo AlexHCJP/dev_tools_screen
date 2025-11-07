@@ -1,5 +1,5 @@
 name: dev_tools_screen
-description: "A new Flutter package project."
+description: "A Flutter package that provides a customizable developer tools screen for debugging and testing purposes."
 version: 0.0.1
 homepage: https://github.com/AlexHCJP/dev_tools_screen
 repository: https://github.com/AlexHCJP/dev_tools_screen
