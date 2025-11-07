@@ -1,7 +1,8 @@
 name: dev_tools_screen
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+homepage: https://github.com/AlexHCJP/dev_tools_screen
+repository: https://github.com/AlexHCJP/dev_tools_screen
 
 environment:
   sdk: ^3.8.1
