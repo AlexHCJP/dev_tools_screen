@@ -1,12 +1,13 @@
-
-import 'package:dev_tools_screen/localization/dev_tools_localizations.dart';
+import 'package:dev_tools_screen/dev_tools_button.dart';
+import 'package:dev_tools_screen/dev_tools_dropdown.dart';
+import 'package:dev_tools_screen/dev_tools_element.dart';
+import 'package:dev_tools_screen/dev_tools_switch.dart';
 import 'package:flutter/material.dart';
 
 class DevToolsScreen extends StatefulWidget {
-  const DevToolsScreen({super.key, this.apiSettings, this.loggerSettings});
+  const DevToolsScreen({super.key, this.elements = const []});
 
-  final DevToolsApiSettings? apiSettings;
-  final DevToolsLoggerSettings? loggerSettings;
+  final List<DevToolsElement> elements;
 
   Future<void> view(BuildContext context) async {
     await Navigator.of(
@@ -18,97 +19,45 @@ class DevToolsScreen extends StatefulWidget {
   State<DevToolsScreen> createState() => _DevToolsScreenState();
 }
 
-class DevToolsApiSettings {
-  DevToolsApiSettings({
-    required this.apiEndpoints,
-    required this.onChangeApi,
-    this.initialApi,
-  });
-
-  final Map<String, String> apiEndpoints;
-  final void Function(String?) onChangeApi;
-  final String? initialApi;
-}
-
-class DevToolsLoggerSettings {
-  DevToolsLoggerSettings({required this.onOpenLogger});
-
-  final void Function() onOpenLogger;
-}
 
 class _DevToolsScreenState extends State<DevToolsScreen> {
-  late final ValueNotifier<String?> _selectedApi;
-
   @override
-  void initState() {
-    super.initState();
-    _selectedApi = ValueNotifier<String?>(widget.apiSettings?.initialApi);
-  }
-
-  @override
-  void dispose() {
-    _selectedApi.dispose();
-    super.dispose();
-  }
-
-  void _onChangeApi(String? apiUrl) {
-    _selectedApi.value = apiUrl;
-    widget.apiSettings?.onChangeApi(apiUrl);
-  }
-
-  @override
-  Widget build(BuildContext context) => Localizations.override(
-    context: context,
-    delegates: [DevToolsLocalizations.delegate],
-    child: Builder(
-      builder: (context) {
-        final localizations = DevToolsLocalizations.of(context);
-        return Scaffold(
-          appBar: AppBar(title: Text(localizations.devTools)),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                if (widget.apiSettings != null) ...[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(localizations.selectApiEndpoint),
-                      ValueListenableBuilder(
-                        valueListenable: _selectedApi,
-                        builder: (context, selectedApi, _) =>
-                            DropdownButton<String?>(
-                              isExpanded: true,
-                              value: selectedApi,
-                              items: widget.apiSettings?.apiEndpoints.entries
-                                  .map(
-                                    (entry) => DropdownMenuItem<String?>(
-                                      value: entry.value,
-                                      child: Text(entry.key),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: _onChangeApi,
-                            ),
-                      ),
-                    ],
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Dev Tools')),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        spacing: 24,
+        children: [
+          ...widget.elements.map(
+            (value) => switch (value) {
+              DevToolsButton() => ElevatedButton(
+                onPressed: value.onPressed,
+                child: Text(value.label),
+              ),
+              DevToolsSwitch() => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(value.label),
+                  Switch(value: value.value, onChanged: value.onChanged),
+                ],
+              ),
+              DevToolsDropdown() => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(value.label),
+                  DropdownButton(
+                    value: value.initalElement,
+                    items: value.items,
+                    onChanged: value.onChanged,
                   ),
                 ],
-                if (widget.loggerSettings != null) ...[
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: widget.loggerSettings?.onOpenLogger,
-                      child: Text(localizations.talker),
-                    ),
-                  ),
-                ],
-              ],
-            ),
+              ),
+              DevToolsElement() => const SizedBox.shrink(),
+            },
           ),
-        );
-      },
+        ],
+      ),
     ),
   );
 }

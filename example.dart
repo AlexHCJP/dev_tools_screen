@@ -1,28 +1,49 @@
-import 'package:dev_tools_screen/dev_tools_screen.dart';
+import 'package:dev_tools_screen/dev_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class DevToolsButton extends StatelessWidget {
-  const DevToolsButton({super.key});
+class DevTools extends StatelessWidget {
+  const DevTools({super.key});
 
   VoidCallback _openDevTools(BuildContext context) => () {
     DevToolsScreen(
-      apiSettings: DevToolsApiSettings(
-        apiEndpoints: {
-          'Development Api': '...',
-          'Staging Api': '...',
-          'Production Api': '...',
-        },
-        onChangeApi: (apiUrl) {
-          /// Handle API change
-        },
-        initialApi: '...',
-      ),
-      loggerSettings: DevToolsLoggerSettings(
-        onOpenLogger: () {
-          /// Handle logger opening
-        },
-      ),
+      elements: [
+        DevToolsDropdown(
+          label: 'Api',
+          items: [
+            const DropdownMenuItem(
+              value: 'Development Api',
+              child: Text('Development Api'),
+            ),
+            const DropdownMenuItem(
+              value: 'Stage Api',
+              child: Text('Production Api'),
+            ),
+            const DropdownMenuItem(
+              value: 'Production Api',
+              child: Text('Production Api'),
+            ),
+          ],
+          initalElement: 'Development Api',
+          onChanged: (value) {
+            /// Handle API change
+          },
+        ),
+
+        DevToolsButton(
+          label: 'Open Logger',
+          onPressed: () {
+            /// Handle logger opening
+          },
+        ),
+        DevToolsSwitch(
+          label: 'Premium Mode',
+          value: false,
+          onChanged: (value) {
+            /// Handle switch change
+          },
+        ),
+      ],
     ).view(context);
   };
 

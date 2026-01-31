@@ -4,7 +4,6 @@ linter:
   rules:
     # Public packages
     public_member_api_docs: false
-    lines_longer_than_120_chars: true
 
     # Enabling rules
     always_use_package_imports: true
@@ -165,7 +164,6 @@ linter:
     avoid_private_typedef_functions: true
     avoid_positional_boolean_parameters: true
     hash_and_equals: true
-    avoid_equals_and_hash_code_on_mutable_classes: true/recommended.yaml
 
 analyzer:
   errors:
