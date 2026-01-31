@@ -1,7 +1,7 @@
 import 'package:dev_tools_screen/dev_tools_element.dart';
 import 'package:flutter/material.dart';
 
-class DevToolsDropdown<T extends Object> extends DevToolsElement {
+class DevToolsDropdown<T> extends DevToolsElement {
   DevToolsDropdown({
     required this.label,
     required this.items,

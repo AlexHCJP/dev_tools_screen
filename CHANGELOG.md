@@ -5,3 +5,7 @@
 ## 0.0.2
 
 * Update tools
+
+## 0.0.3
+
+* fix dropdown

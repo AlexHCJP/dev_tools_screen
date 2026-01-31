@@ -19,7 +19,6 @@ class DevToolsScreen extends StatefulWidget {
   State<DevToolsScreen> createState() => _DevToolsScreenState();
 }
 
-
 class _DevToolsScreenState extends State<DevToolsScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
